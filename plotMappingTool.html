@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>plotMapping</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/github-markdown.css" />
+    <link rel="stylesheet" type="text/css" href="css/plot-mapping.css" />
+    <script src="js/plot-map.js"></script>
+</head>
+<body>
+    <div class="map-parent">
+        <h2>Plot Mapping</h2>
+        <div id="map"></div>
+        <!--<div class="dummy"></div>-->
+    </div>
+    <div class="side-panel">
+        <h2>Datas</h2>
+        <div>
+            <button id="btnPlotAnimation" type="button">▷</button>
+        </div>
+        <ul id="plotDataList">
+            <li><input id="rdo202001" type="radio" name="plotData" value="202001" checked />2020年データ1 </li>
+            <li><input id="rdo202002" type="radio" name="plotData" value="202002" />2020年データ2 </li>
+            <li><input id="rdo202003" type="radio" name="plotData" value="202003" />2020年データ3 </li>
+            <li><input id="rdo202004" type="radio" name="plotData" value="202004" />2020年データ4 </li>
+            <li><input id="rdo202005" type="radio" name="plotData" value="202005" />2020年データ5 </li>
+            <li><input id="rdo202006" type="radio" name="plotData" value="202006" />2020年データ6 </li>
+        </ul>
+        <h2>Tips</h2>
+        <ul>
+            <li>
+                <span>円の大きさ：データ数</span>
+                <div>
+                    <span>多</span>
+                    <div style="width:150px; display:inline-block;">
+                        <div class="circle-range" style="width:14px; height:14px;"></div>
+                        <div class="circle-range" style="width:12px; height:12px;"></div>
+                        <div class="circle-range" style="width:10px; height:10px;"></div>
+                        <div class="circle-range" style="width:8px; height:8px;"></div>
+                    </div>
+                    <span>少</span>
+                </div>
+            </li>
+            <li>
+                <span>円の色味：平均値</span>
+                <div>
+                    <span>高</span>
+                    <div class="color-range"></div>
+                    <span>低</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div style="padding-left: 10px;">
+        
+    </div>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+</body>
+</html>
