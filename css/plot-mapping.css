@@ -39,6 +39,7 @@ html, body {
     padding-left: 5px;
 }
 
+/*円の色見をグラデーションで作成*/
 .color-range {
     width: 150px;
     height: 12px;
@@ -46,6 +47,7 @@ html, body {
     display: inline-block;
 }
 
+/*CSSで円を作成*/
 .circle-range {
     border: 0.5px solid white;
     border-radius: 50%;
