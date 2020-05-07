@@ -311,7 +311,7 @@ var testData = {
     },
 };
 
-// アニメーション
+// プロットマッピング
 function plotMapping() {
     // 再生・停止ボタン
     this.anmButton = document.getElementById('btnPlotAnimation');
@@ -393,7 +393,7 @@ function plotMapping() {
 
     // マーカー全削除
     this.removeAll = function () {
-        map.data.forEach(function (value, idx) {
+        map.data.forEach(function (value) {
             map.data.remove(value);
         });
         infoWindow.close();
@@ -426,27 +426,27 @@ function plotMapping() {
 
         map.styling.rangeCount = rangeCount;
         map.styling.rangeAvg = rangeAvg;
+        // データを追加し、円を描画する。
         map.data.addGeoJson(mappingData);
     };
 };
 
 // マップ初期化
 function initMap() {
+    // google map 初期化
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4, // 初期表示時の縮尺
         center: { lat: 36, lng: -101 }, // 初期表示位置
-        // mapTypeId: 'terrain'
-        mapTypeControl: false,
-        panControl: false,
-        zoomControl: false,
-        streetViewControl: false,
+        mapTypeControl: false, // 地図、航空写真機能を非表示
+        zoomControl: false, // ズーム機能(+-)を非表示
+        streetViewControl: false, // ストリートビュー機能を非表示
     });
-
     infoWindow = new google.maps.InfoWindow();
 
-    var styling = new mapStyling();
+    // 円のスタイル設定をmapに保持
+    var styling = new circleStyling();
     map.styling = styling;
-    // 円描画時のスタイル設定
+    // 円描画時のスタイルを設定
     map.data.setStyle(function (feature) {
         var meter = feature.getProperty('meter');
         var cnt = feature.getProperty('dataCount');
@@ -466,6 +466,7 @@ function initMap() {
         if (avgs.length > 1) {
             avgs[1] = avgs[1].substring(0, avgs[1].length >= 2 ? 2 : avgs[1].length);
         }
+        // 表示内容生成
         var content = `
         <div>
             <div>`+ name + `</div>
@@ -482,19 +483,19 @@ function initMap() {
         iw.open(map);
     });
 
-    // アニメーション開始ボタン
+    // プロットマッピング初期化
     var plotMap = new plotMapping();
     plotMap.init();
     plotMap.setMapData('202001');
 }
 
-// マップ円を設定
-function mapStyling() {
+// 円スタイル設定
+function circleStyling() {
+    // 緑色最大値
     const gmax = 255;
-    const scaleMax = 60;
+    // 円の最大、最小サイズ
     const scaleMin = 5;
-    const avgMax = 40;
-    const cntMax = 400;
+    const scaleMax = 60;
 
     // データ範囲(0:min,1:max)
     this.rangeCount = [,];
@@ -503,12 +504,12 @@ function mapStyling() {
     // 円描画
     this.getCircle = function (meter, cnt) {
         var avg = meter / cnt;
-        var avgRation = avg / this.rangeAvg[1];
-        avgRation = avgRation > 1 ? 1 : avgRation;
+        var avgRatio = avg / this.rangeAvg[1];
+        avgRatio = avgRatio > 1 ? 1 : avgRatio;
         var cntRatio = cnt / this.rangeCount[1];
 
         // 緑値決定
-        var g = (1 - avgRation) * gmax;
+        var g = (1 - avgRatio) * gmax;
         g = g > gmax ? gmax : g;
         // 円サイズ決定
         var s = cntRatio * scaleMax;
@@ -519,12 +520,12 @@ function mapStyling() {
         }
 
         return {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: 'rgb(255,' + g + ',0)',
-            fillOpacity: .4,
-            scale: s,
-            strokeColor: 'white',
-            strokeWeight: .5
+            path: google.maps.SymbolPath.CIRCLE, // 円を指定
+            fillColor: 'rgb(255,' + g + ',0)', // 円の色
+            fillOpacity: 0.4, // 円の透明度
+            scale: s, // 円のサイズ
+            strokeColor: 'white', // 円の枠線の色
+            strokeWeight: 0.5 // 円の枠線の太さ
         };
     };
 };
